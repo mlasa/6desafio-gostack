@@ -2,12 +2,11 @@
 
 import { getRepository, getCustomRepository } from 'typeorm';
 
+import AppError from '../errors/AppError';
+
 import Transaction from '../models/Transaction';
 import Category from '../models/Category';
-import transactionsRouter from '../routes/transactions.routes';
 import TransactionRepository from '../repositories/TransactionsRepository';
-
-import AppError from '../errors/AppError';
 
 interface RequestDTO {
   title: string;
@@ -17,14 +16,21 @@ interface RequestDTO {
 }
 
 class CreateTransactionService {
-  public async execute({ title, value, type, category }: RequestDTO): Promise<Transaction> {
+  public async execute({
+    title,
+    value,
+    type,
+    category,
+  }: RequestDTO): Promise<Transaction> {
     const transactionsRepository = getCustomRepository(TransactionRepository);
     const categoryRepository = getRepository(Category);
 
     // verificando saldo
     if (type === 'outcome') {
-      const balance = await transactionsRepository.getBalance();
-      if (balance.total < value) throw new AppError('Balance is not sufficient', 400);
+      const { total } = await transactionsRepository.getBalance();
+      if (total < value) {
+        throw new AppError('Balance is not sufficient');
+      }
     }
 
     // checando existencia da categoria
@@ -32,7 +38,7 @@ class CreateTransactionService {
       where: { title: category },
     });
 
-    //nao existe...criando a categoria
+    // nao existe...criando a categoria
     if (!categoryExists) {
       categoryExists = categoryRepository.create({
         title: category,
@@ -44,8 +50,8 @@ class CreateTransactionService {
       title,
       value,
       type,
-      category_id: categoryExists.id
-    })
+      category_id: categoryExists.id,
+    });
     await transactionsRepository.save(transaction);
 
     return transaction;

@@ -8,7 +8,7 @@ import CreateTransactionService from '../services/CreateTransactionService';
 const transactionsRouter = Router();
 
 transactionsRouter.get('/', async (request, response) => {
-  // TODO
+  return response.status(200).json({ ok: 'true' });
 });
 
 transactionsRouter.post('/', async (request, response) => {
@@ -18,17 +18,17 @@ transactionsRouter.post('/', async (request, response) => {
     title,
     value,
     type,
-    category
+    category,
   });
   return response.status(200).json(transaction);
 });
 
 transactionsRouter.delete('/:id', async (request, response) => {
-  // TODO
+  return response.status(200).json({ ok: 'true' });
 });
 
 transactionsRouter.post('/import', async (request, response) => {
-  // TODO
+  return response.status(200).json({ ok: 'true' });
 });
 
 export default transactionsRouter;

@@ -25,7 +25,7 @@ export default class CreateTransactions1597630184052
           },
           {
             name: 'value',
-            type: 'number',
+            type: 'integer',
           },
           {
             name: 'type',
@@ -33,7 +33,7 @@ export default class CreateTransactions1597630184052
           },
           {
             name: 'category_id',
-            type: 'varchar',
+            type: 'uuid',
           },
           {
             name: 'created_at',

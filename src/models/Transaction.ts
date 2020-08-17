@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import Category from './Category';
 
-Entity('transactions');
+@Entity('transactions')
 class Transaction {
   @PrimaryGeneratedColumn('uuid')
   id: string;
