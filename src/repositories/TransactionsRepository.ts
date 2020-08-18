@@ -8,34 +8,32 @@ interface Balance {
   total: number;
 }
 
-
-
 @EntityRepository(Transaction)
 class TransactionsRepository extends Repository<Transaction> {
   public async getBalance(): Promise<Balance> {
-
-    const transactions = await this.find()
+    const transactions = await this.find();
 
     const { income, outcome } = transactions.reduce(
       (accumulator, transaction) => {
         if (transaction.type === 'income')
           accumulator.income += transaction.value;
-        else if (transaction.type === 'outcome')
+        else {
           accumulator.outcome += transaction.value;
-
+        }
         return accumulator;
       },
-      {// iniciando income e outcome em zero
+      {
+        // iniciando income e outcome em zero
         income: 0,
         outcome: 0,
       },
     );
 
     return {
-      "income": income,
-      "outcome": outcome,
-      "total": income + outcome
-    }
+      income,
+      outcome,
+      total: income - outcome,
+    };
   }
 }
 
