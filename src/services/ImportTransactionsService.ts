@@ -28,7 +28,7 @@ class ImportTransactionsService {
     const categories: string[] = [];
 
     parseCSV.on('data', async line => {
-      const [title, value, type, category] = line;
+      const [title, type, value, category] = line;
       if (!title || !type || !value) {
         throw new AppError('All transaction data needs to be informed');
       }
@@ -62,6 +62,7 @@ class ImportTransactionsService {
       categoriesNotExistent.map(newCategory => ({ title: newCategory })),
     );
     await categoriesRepository.save(categoriesCreated);
+    console.log('============= CATEGORIAS CRIADAS==========================');
 
     // criando a transação
     const transactionsRepository = getCustomRepository(TransactionRepository);
