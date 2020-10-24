@@ -4,8 +4,8 @@ import multer from 'multer';
 
 import uploadConfig from '../config/upload';
 
-import TransactionsRepository from '../repositories/TransactionsRepository';
 import CreateTransactionService from '../services/CreateTransactionService';
+import ListTransactionsService from '../services/ListTransactionsService';
 import DeleteTransactionService from '../services/DeleteTransactionService';
 import ImportTransactionsService from '../services/ImportTransactionsService';
 
@@ -13,10 +13,9 @@ const transactionsRouter = Router();
 const upload = multer(uploadConfig);
 
 transactionsRouter.get('/', async (request, response) => {
-  const transactionsRepository = getCustomRepository(TransactionsRepository);
-  const transactions = await transactionsRepository.find();
-  const balance = await transactionsRepository.getBalance();
-  return response.status(200).json({ transactions, balance });
+  const listTransactionsService = new ListTransactionsService();
+  const transactions = await listTransactionsService.execute();
+  return response.status(200).json(transactions);
 });
 
 transactionsRouter.post('/', async (request, response) => {
