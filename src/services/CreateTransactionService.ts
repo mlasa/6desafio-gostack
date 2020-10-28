@@ -45,6 +45,9 @@ class CreateTransactionService {
       });
       await categoryRepository.save(categoryExists);
     }
+    if (!Number.isInteger(value)) {
+      throw new AppError("Transaction's value needs to be integer");
+    }
 
     const transaction = transactionsRepository.create({
       title,

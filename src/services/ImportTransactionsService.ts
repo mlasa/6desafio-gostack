@@ -30,7 +30,10 @@ class ImportTransactionsService {
     parseCSV.on('data', async line => {
       const [title, type, value, category] = line;
       if (!title || !type || !value) {
-        throw new AppError('All transaction data needs to be informed');
+        throw new AppError('Title, type and value of transaction are needed');
+      }
+      if (!!Number.isInteger(value)) {
+        throw new AppError("Transaction's value needs to be integer");
       }
       categories.push(category);
       transactions.push({ title, value, type, category });
